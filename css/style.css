@@ -1,0 +1,196 @@
+/* Global CSS styling */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Box shadow effect for navigation section */
+header {
+    background-color: white;
+    box-shadow: 1px 1px 1px 1px #0000000a;
+}
+
+/* Navbar styling */
+.navbar.fixed-top {
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1050;
+    background-color: white;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Content from hiding behind the navbar for large devices */
+.home-page {
+    padding-top: 100px;
+}
+
+/* Content from hiding behind the navbar for smalle devices */
+@media (max-width: 576px) {
+    .home-page {
+        padding-top: 70px;
+    }
+}
+
+/* Ensure logo doesn't hog space on small screens */
+.navbar-brand img {
+    max-width: 80px;
+    height: auto;
+}
+
+/* Ensure logo doesn't hog space on extra small screens */
+@media (max-width: 576px) {
+    .btn {
+        padding: 0.375rem 0.5rem;
+        font-size: 0.85rem;
+    }
+
+    .navbar-brand img {
+        max-width: 50px;
+    }
+}
+
+/* Hero banner Badge styling */
+.badge-tag {
+    background-color: beige;
+    width: fit-content;
+    color: black;
+    font-style: italic;
+}
+
+/* Hero banner styling for large screens */
+.hero .banner {
+    height: 100%;
+    min-height: 300px;
+    object-fit: cover;
+    object-position: center;
+}
+
+/* Hero banner styling for small screens */
+@media (max-width: 350px) {
+    .hero-heading {
+        font-size: 1.2rem;
+    }
+
+    .badge-tag {
+        font-size: 0.7rem;
+        white-space: normal;
+    }
+
+    /* Hero banner description limiting to 2 lines for small screens */
+    .hero p {
+        font-size: 0.8rem;
+        display: -webkit-box;
+        line-clamp: 2;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+}
+
+/* Hero banner Card styling */
+.hero .card {
+    min-height: 300px;
+    overflow: hidden;
+}
+
+/* Gallery image in Features section styling for large screens */
+.gallery-images {
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+    max-height: 70vh;
+    object-fit: cover;
+}
+
+/* Gallery image in Features section styling for extra small screens */
+@media (max-width: 320px) {
+    .gallery-images {
+        max-height: 200px;
+    }
+}
+
+/* Carousel image styling */
+.carousel-item img {
+    height: 500px;
+    object-fit: cover;
+}
+
+/* Carousel caption styling */
+.carousel-caption {
+    background: rgba(0, 0, 0, 0.3);
+    padding: 15px;
+    border-radius: 10px;
+    color: white;
+    font-weight: bolder;
+}
+
+/* Strike through text styling */
+.strike-through {
+    text-decoration: line-through;
+}
+
+/* Destination section prices class styling */
+.amount-class {
+    color: blue;
+    font-size: 2rem;
+    font-style: italic;
+}
+
+/* Google map embedding styling for small screens */
+@media (max-width : 576px) {
+    div iframe {
+        width: 120px;
+        height: 120px;
+    }
+}
+
+/* Sign In page wrapper styling */
+.signin-wrapper {
+    background: #f4f7f6;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Sign In page card styling */
+.signin-card {
+    max-width: 400px;
+    width: 90%;
+}
+
+/* Sign Up page wrapper styling */
+.signup-wrapper {
+    background: #f4f7f6;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.signup-card {
+      max-width: 500px;
+    width: 90%;
+}
+
+
+.error-msg {
+    color: #dc3545;
+    font-size: 0.8rem;
+    display: none; /* Hidden by default */
+    margin-top: 4px;
+}
+
+/* Class to show error when validation fails */
+.error-msg.show {
+    display: block;
+}
+
+/* Optional: Red border for invalid inputs */
+.is-invalid {
+    border-color: #dc3545 !important;
+}
