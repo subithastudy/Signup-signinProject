@@ -8,91 +8,191 @@ document.querySelectorAll('.navbar-nav .nav-link').forEach(link => {
     });
 });
 
-// Sign In form validation
-document.addEventListener('DOMContentLoaded', () => {
-    const form = document.getElementById('signinForm');
-    const emailInput = document.getElementById('loginEmail');
-    const passInput = document.getElementById('loginPassword');
-    const emailFeedback = document.getElementById('emailFeedback');
-    const passLengthHint = document.getElementById('passLengthHint');
-    const passFormatFeedback = document.getElementById('passFormatFeedback');
-    const loginError = document.getElementById('loginError');
-
-    // Default Credentials
-    const DEFAULT_EMAIL = "admin@xplore.com";
-    const DEFAULT_PASS = "Admin@123";
-
-    // Password Toggle
-    document.querySelector('.password-toggle').addEventListener('click', function () {
-        const type = passInput.type === 'password' ? 'text' : 'password';
-        passInput.type = type;
-        this.querySelector('i').classList.toggle('fa-eye');
-        this.querySelector('i').classList.toggle('fa-eye-slash');
-    });
-
-    // Password Validation
-    passInput.addEventListener('input', () => {
-        const val = passInput.value;
-
-        // Show length hint while typing, disappear once 8 characters reached
-        if (val.length > 0 && val.length < 8) {
-            passLengthHint.style.display = 'block';
+// Show or hide using toggle button
+const toggles = document.querySelectorAll(".toggle-password");
+toggles.forEach(toggle => {
+    toggle.addEventListener("click", () => {
+        const input = toggle.previousElementSibling;
+        if (input.type === "password") {
+            input.type = "text";
         } else {
-            passLengthHint.style.display = 'none';
-        }
-
-        // Format Validation after 8 chars
-        if (val.length >= 8) {
-            const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$%\^&+=!]).{8,255}$/;
-            if (!regex.test(val)) {
-                passFormatFeedback.textContent = "The entered password is weak: include a special character, number, uppercase, and lowercase letter.";
-            } else {
-                passFormatFeedback.textContent = "";
-            }
-        } else {
-            passFormatFeedback.textContent = "";
+            input.type = "password";
         }
     });
+});
 
-    // Form Submission and Validation
-    form.addEventListener('submit', (e) => {
+// Sign Up validation
+const signupForm = document.getElementById("signupForm");
+if (signupForm) {
+    signupForm.addEventListener("submit", function (e) {
         e.preventDefault();
         let isValid = true;
 
-        // Reset display
-        emailFeedback.textContent = "";
-        loginError.style.display = 'none';
+        // Fetching data using IDs
+        const fullName = document.getElementById("fullName");
+        const email = document.getElementById("signupEmail");
+        const phone = document.getElementById("phone");
+        const city = document.getElementById("city");
+        const password = document.getElementById("signupPassword");
+        const confirmPassword = document.getElementById("confirmPassword");
+
+        // Regexes for validation
+        const emailPattern = /^[^ ]+@[^ ]+\.[a-z]{2,3}$/;
+        const phonePattern = /^[0-9]{10}$/;
+        const cityPattern = /^[A-Za-z ]+$/;
+        // const passwordPattern = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+        const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$%^&+=!])[A-Za-z\d@#$%^&+=!]{8,}$/;
+
+        function setError(input, message) {
+            input.classList.add("fail");
+            input.classList.remove("success");
+
+            // Select error element correctly
+            const errorElement = input.parentElement.querySelector(".error");
+            errorElement.innerText = message;
+
+            isValid = false;
+        }
+
+        function setSuccess(input) {
+            input.classList.add("success");
+            input.classList.remove("fail");
+
+            // Clear error message
+            const errorElement = input.parentElement.querySelector(".error");
+            errorElement.innerText = "";
+        }
+
+        // Regex for full name validation
+        const namePattern = /^[A-Za-z ]+$/;
+
+        // Full name validation
+        if (fullName.value.trim() === "") {
+            setError(fullName, "Full Name is required");
+        }
+        else if (!namePattern.test(fullName.value)) {
+            setError(fullName, "Only alphabets allowed");
+        }
+        else {
+            setSuccess(fullName);
+        }
 
         // Email validation
-        const emailVal = emailInput.value.trim();
-        if (!emailVal) {
-            emailFeedback.textContent = "Email field is empty";
-            isValid = false;
-        } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailVal)) {
-            emailFeedback.textContent = "Not a valid email";
-            isValid = false;
-        }
-
-        // Password Format Check on Submit
-        const passVal = passInput.value;
-        const passRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$%\^&+=!]).{8,255}$/;
-        if (!passRegex.test(passVal)) {
-            isValid = false;
-        }
-
-        if (!isValid) return;
-
-        // Default Credentials Authentication
-        if (emailVal === DEFAULT_EMAIL && passVal === DEFAULT_PASS) {
-            window.location.href = 'index.html';
+        if (!emailPattern.test(email.value)) {
+            setError(email, "Enter valid email");
         } else {
-            loginError.textContent = "Invalid email or password";
-            loginError.style.display = 'block';
+            setSuccess(email);
+        }
+
+        // Phone number validation
+        if (!phonePattern.test(phone.value)) {
+            setError(phone, "Phone must be 10 digits");
+        } else {
+            setSuccess(phone);
+        }
+
+        // Location or city validation
+        if (!cityPattern.test(city.value)) {
+            setError(city, "Only alphabets allowed");
+        } else {
+            setSuccess(city);
+        }
+
+        // Password validation
+        if (!passwordPattern.test(password.value)) {
+            setError(
+                password,
+                "Password must contain at least 8 characters, atleast one uppercase letter, one lowercase letter, one number and one special character"
+            );
+        } else {
+            setSuccess(password);
+        }
+
+        // Confirm Password validation
+        if (confirmPassword.value !== password.value || confirmPassword.value === "") {
+            setError(confirmPassword, "Passwords do not match");
+        } else {
+            setSuccess(confirmPassword);
+        }
+
+        // Storing data
+        if (isValid) {
+            const userData = {
+                email: email.value,
+                password: password.value
+            };
+            localStorage.setItem("user", JSON.stringify(userData));
+            alert("Account created successfully!");
+            window.location.href = "signin.html";
         }
     });
 
-    // Close button redirect
-    document.getElementById('closeBtn').addEventListener('click', () => {
-        window.location.href = 'index.html';
+}
+
+// Sign In validation
+const signinForm = document.getElementById("signinForm");
+if (signinForm) {
+    signinForm.addEventListener("submit", function (e) {
+        e.preventDefault();
+        let isValid = true;
+
+        // Fetching data using IDs
+        const email = document.getElementById("signinEmail");
+        const password = document.getElementById("signinPassword");
+
+        // Regex for validation Email
+        const emailPattern = /^[^ ]+@[^ ]+\.[a-z]{2,3}$/;
+        const namePattern = /^[A-Za-z ]+$/;
+
+        // Validation function
+        function setError(input, message) {
+            input.classList.add("fail");
+            input.classList.remove("success");
+            input.nextElementSibling.innerText = message;
+            isValid = false;
+        }
+
+        function setSuccess(input) {
+            input.classList.add("success");
+            input.classList.remove("fail");
+            input.nextElementSibling.innerText = "";
+        }
+
+        // Email validation
+        if (!emailPattern.test(email.value)) {
+            setError(email, "Enter valid email");
+        } else {
+            setSuccess(email);
+        }
+
+        // Password validation
+        if (password.value.trim() === "") {
+            setError(password, "Password required");
+        } else {
+            setSuccess(password);
+        }
+
+        // Sign In verification
+        if (isValid) {
+            const storedUser = JSON.parse(localStorage.getItem("user"));
+            if (
+                storedUser &&
+                storedUser.email === email.value &&
+                storedUser.password === password.value
+            ) {
+                alert("Login Successful!");
+                window.location.href = "travelapp.html";
+            } else {
+                alert("Invalid Email or Password");
+            }
+        }
+    });
+}
+
+// Close button functionality
+const closeButtons = document.querySelectorAll(".close-btn");
+closeButtons.forEach(button => {
+    button.addEventListener("click", () => {
+        window.location.href = "index.html";
     });
 });
